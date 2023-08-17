@@ -3,7 +3,7 @@ const { errorMessage } = require('../../utils/helpers.utils');
 const { createOrderSchema } = require('../Order/validation');
 const {Order} = require("../../model/orders.model")
 // This is your test secret API key.
-const stripe = require('stripe')('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');
+const stripe = require('stripe')(process.env.STRIPE);
 
 async function paymetCreate(req, res) {
     // req.body.map((ele) => {
