@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML to PDF</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      @media print {
+        .page-break {
+          break-inside: avoid;
+        }
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        font-size: 10px;
+        margin: 0;
+        padding: 0;
+        font-weight: 700;
+      }
+      .shiplable {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .main {
+        width: 400px;
+        height: 500px;
+        margin: auto;
+        border: 1px solid #808080;
+      }
+      .main .header {
+        height: 10%;
+        display: flex;
+        align-items: start;
+        width: 100%;
+        border-bottom: 1px solid #808080;
+      }
+      .header .reg {
+        width: 15%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        border-right: 1px solid #808080;
+      }
+      .header .partner-order-id {
+        width: 62%;
+        height: 100%;
+        border-bottom: 1px solid #808080;
+        border-right: 1px solid #808080;
+      }
+      .header .partner-order-id .partner {
+        text-align: center;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #808080;
+      }
+      .header .partner-order-id .order {
+        text-align: center;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .header .type {
+        height: 100%;
+        width: 23%;
+        border-bottom: 1px solid #808080;
+      }
+      .header .type .surface {
+        text-align: center;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #808080;
+      }
+      .header .type .pay {
+        text-align: center;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* //invoice  */
+      #invoice {
+        height: 500px;
+        width: 500px;
+        margin: auto;
+        border: 1px solid #ab0808;
+      }
+      .address-order-info {
+        /* background-color: red; */
+        height: 50%;
+        display: flex;
+      }
+      .main .left {
+        width: 30%;
+        height: 100%;
+        border-bottom: 1px solid #808080;
+        border-right: 1px solid #808080;
+      }
+      .main .right {
+        width: 70%;
+        height: 100%;
+        border-bottom: 1px solid #808080;
+      }
+
+      .main .left .rotate {
+        transform: translateY(60px) rotate(90deg);
+        width: 140px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+      .main .left .top {
+        text-align: center;
+      }
+      .main .left {
+        font-weight: 500;
+      }
+
+      .top-qr {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #808080;
+        padding: 5px;
+      }
+      .address-order-info .shipping-address {
+        padding: 5px;
+        font-weight: 700;
+      }
+
+      .main .solBy-address {
+        height: 7%;
+        padding: 5px;
+        border-bottom: 1px solid #808080;
+      }
+      .main .sku-id {
+        border-bottom: 1px solid #808080;
+        display: flex;
+      }
+      .main .sku-id .sr {
+        width: 5%;
+        text-align: center;
+        border-right: 1px solid #808080;
+      }
+      .main .sku-id .center {
+        width: 86%;
+        padding: 0 5px;
+        text-align: center;
+        border-right: 1px solid #808080;
+      }
+      .main .sku-id .qty {
+        width: 9%;
+        text-align: center;
+      }
+      .main .bottom-barcode {
+        /* background: red; */
+        height: 10%;
+        width: 100%;
+        padding: 5px 0;
+        border-bottom: 1px solid #808080;
+      }
+      .main .bottom-barcode span {
+        display: inline-block;
+        margin-left: 15px;
+      }
+      .main .printed-at {
+        height: 7%;
+        padding-right: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+      }
+    </style>
+    <script src="../../node_modules/jsbarcode/dist/JsBarcode.all.min.js"></script>
+  </head>
+
+  <body>
+    <div class="shiplable">
+      <div class="main">
+        <div class="header">
+          <div class="reg"><h2>REG</h2></div>
+          <div class="partner-order-id">
+            <div class="partner">
+              <span>EKart Logisticks</span>
+            </div>
+            <div class="order">
+              <span>OD <%=result._id%></span>
+            </div>
+          </div>
+          <div class="type">
+            <div class="surface">
+              <span>SURFACE</span>
+            </div>
+            <div class="pay">
+              <span> <%=result.paymentMethod%></span>
+            </div>
+          </div>
+        </div>
+        <div class="address-order-info">
+          <div class="left">
+            <div class="top">
+              <span class="order-through">Order Through</span>
+              <img
+                style="object-fit: fill; margin-top: 5px"
+                height="40%"
+                width="40%"
+                src="https://logos-download.com/wp-content/uploads/2018/11/Fastrack_Logo-700x335.png"
+                alt=""
+              />
+            </div>
+            <div class="rotate">
+              <span>AWB No. <%=result.awb%></span>
+              <img
+                src="https://barcode.orcascan.com/?type=pdf417&data=OD<%=result.awb%>"
+                style="object-fit: fill"
+                height="100%"
+                width="130%"
+              />
+            </div>
+          </div>
+          <div class="right">
+            <div class="top-qr">
+              <img
+                src="https://barcode.orcascan.com/?type=qr&data=<%=result.productId%>"
+                style="object-fit: fill"
+                height="50%"
+                width="50%"
+                class="barcode"
+              />
+            </div>
+            <div class="shipping-address">
+              <span>Shipping/Customer Address:</span><br />
+              <span>Name:<%=result.name%>,</span> <br />
+              <span> <%=result.shippingAddress%> </span>
+            </div>
+          </div>
+        </div>
+        <div class="solBy-address">
+          <span>Sold By-<%=result.sellarAddress%> </span>
+        </div>
+        <div class="sku-id">
+          <div class="sr"></div>
+          <div class="center">SKU ID | Description</div>
+          <div class="qty">QTY</div>
+        </div>
+        <!-- //sku id  -->
+        <div class="sku-id">
+          <div
+            class="sr"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            1
+          </div>
+          <div
+            class="center"
+            style="text-align: start; font-weight: 400; padding: 8px 5px"
+          >
+            <%=result.title%>
+          </div>
+          <div
+            class="qty"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            <%=result.quantity%>
+          </div>
+        </div>
+        <!-- //bottom-barcode  -->
+        <div class="bottom-barcode">
+          <span> <%=result.awb%></span>
+          <img
+            src="https://barcode.orcascan.com/?type=pdf417&data=OD<%=result.awb%>"
+            style="object-fit: cover"
+            height="60%"
+            width="72%"
+          />
+        </div>
+        <!-- //printed at  -->
+        <div class="printed-at">
+          <span>Printed at, <span id="current-date"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <script>
+      // JsBarcode("#barcode", "5566sfsdfdf9555", {
+      //   width: 1.5,
+      //   height: 40,
+      // });
+      // document
+      //   .getElementById("barcode")
+      //   .setAttribute(
+      //     "src",
+      //     ""
+      //   );
+      document.getElementById("current-date").innerHTML =
+        new Date().toDateString() + " , " + new Date().toLocaleTimeString();
+    </script>
+  </body>
+</html>
