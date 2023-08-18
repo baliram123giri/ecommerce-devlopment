@@ -5,13 +5,14 @@ const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
+
 mongoose
   .connect(
-    `mongodb+srv://fastrack:RhTRsnf0OTKJsLer@cluster0.ow9bv.mongodb.net/?retryWrites=true&w=majority`
+    `${process.env.URL}`
   )
   .then(() => console.log("connection success"))
   .catch((err) => console.log(err));
-
+const PORT = process.env.PORT || 4000
 app.use(cookieParser());
 app.use(express.json());
 
@@ -37,4 +38,4 @@ app.use("/api/payment", require("./Routers/payment.routes"));
 app.use((req, res, next) => {
   res.status(404).json("Url not found");
 });
-app.listen(4000, () => console.log(`${4000} Server running`));
+app.listen(PORT, () => console.log(`${PORT} Server running`));
